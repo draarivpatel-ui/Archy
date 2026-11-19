@@ -63,29 +63,6 @@ class ArchyRefused(Exception):
     """archy declined the tree on purpose; not a divergence to triage."""
 
 
-EXPLAINED = {
-    "init_targeting": (
-        "ruff points an import at a package's `__init__.py` where archy points at "
-        "the submodule it names (or the reverse); the same source reaches the same "
-        "package in both graphs"
-    ),
-    "implicit_init": (
-        "archy reports an edge from a module to an ancestor package's `__init__.py` "
-        "(for instance `from pkg import Name` inside `pkg`, where `Name` is a symbol "
-        "rather than a submodule); ruff reports no such edge"
-    ),
-    "reexport_resolution": (
-        "`from pkg import Name` where `pkg/__init__.py` re-exports `Name`: archy "
-        "follows the re-export to the file that defines it (by design, so the edge "
-        "is not to the package node); ruff stops at `pkg/__init__.py`"
-    ),
-    "script_sibling": (
-        "a script in a directory with no `__init__.py` imports a sibling file by "
-        "bare name (`from _common import x`); archy skips top-level siblings"
-    ),
-}
-
-
 def _dir(path: str) -> str:
     return str(PurePosixPath(path).parent)
 
